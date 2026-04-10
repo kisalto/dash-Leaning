@@ -1,0 +1,58 @@
+[project]
+name = "dash-ploply-callbacks"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+requires-python = ">=3.14,<4.0"
+dependencies = [
+    "taskipy (>=1.14.1,<2.0.0)",
+    "dash[diskcache] (>=4.1.0,<5.0.0)",
+    "plotly[express] (>=6.6.0,<7.0.0)",
+    "pandas (>=3.0.2,<4.0.0)",
+    "dash-ag-grid (>=35.2.0,<36.0.0)",
+    "diskcache (>=5.6.3,<6.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "taskipy (>=1.14.1,<2.0.0)",
+    "ruff (>=0.15.8,<0.16.0)",
+    "typos (>=1.44.0,<2.0.0)",
+    "pytest (>=9.0.2,<10.0.0)",
+    "pytest-cov (>=7.1.0,<8.0.0)"
+]
+
+[tool.ruff]
+line-length = 88
+extend-exclude = ['migrations']
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT']
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'
+docstring-code-format = true
+docstring-code-line-length = 88
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = '-p no:warnings'
+
+[tool.taskipy.tasks]
+pre_lint = 'typos'
+lint = 'ruff check'
+pre_format = 'ruff check --fix'
+format = 'ruff format .'
+run = 'python3 app.py'
+pre_test = 'task lint'
+test = 'pytest -s -x --cov=fast_zero -vv'
+post_test = 'coverage html'
